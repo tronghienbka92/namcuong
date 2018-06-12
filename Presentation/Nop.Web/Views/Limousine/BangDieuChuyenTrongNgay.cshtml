@@ -1,0 +1,90 @@
+﻿@model DanhSachChuyenDiModel
+@using Nop.Core.Infrastructure
+@using Nop.Core.Domain.NhaXes;
+@using Nop.Web.Models.NhaXes
+@using Nop.Services.NhaXes
+@{
+    Layout = "~/Views/Shared/_NhaXeLayout.cshtml";
+}
+
+
+<table style="width:100%">
+    <tr>        
+        <td align="center" width="15%">
+            <table class="adminContent">
+                <tr>
+                    <td class="adminTitle" style="text-align:right">
+                        <h3>Thông tin xe và tài xế đi trong ngày:</h3>
+                    </td>
+                    <td class="adminData">
+                        @Html.EditorFor(model => model.NgayDi)
+                    </td>
+                </tr>
+            </table>
+        </td>       
+        <td align="center" width="20%">
+            <table class="adminContent">
+                <tr>
+                    <td class="adminTitle" style="text-align:right">
+                        Chọn khung giờ:
+                    </td>
+                    <td class="adminData">
+                        @Html.DropDownListFor(model => model.KhungGioId, Model.khunggios)
+                    </td>
+                </tr>
+            </table>
+        </td> 
+        <td></td>
+    </tr>
+</table>
+
+<div id="tabChuyenDi"></div>
+
+<script>
+    
+    function LoadChuyenDi() {
+        var _ngaydi = ConvertDateTimeSystem($("#@Html.FieldIdFor(m=>m.NgayDi)").val());
+        var _khunggioid = $("#@Html.FieldIdFor(m=>m.KhungGioId)").val();
+
+        var additionalData = {
+            KhungGioId:_khunggioid,
+            NgayDi: _ngaydi
+        };
+        $.ajax({
+            cache: false,
+            type: "GET",
+            dataType: "html",
+            contentType: 'application/html;charset=utf-8',
+            data: additionalData,
+            url: "@(Url.Action("_BangDieuChuyenTrongNgay", "Limousine"))",
+            success: function (data) {
+
+                if (data != null)
+                {
+                    $("#tabChuyenDi").html(data);
+                }
+                else
+                {
+                    $("#tabChuyenDi").html("<p>Không có quyền</p>")
+                }
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Chưa đủ thông tin');
+            }
+        });
+    }
+    $(document).ready(function () {
+        LoadChuyenDi();
+        $('#@Html.FieldIdFor(model => model.KhungGioId)').change(function () {
+            LoadChuyenDi();
+        });
+        $("#@Html.FieldIdFor(model => model.NgayDi)").change(function () {
+            LoadChuyenDi();
+        });          
+    });
+
+</script>
+
+
+

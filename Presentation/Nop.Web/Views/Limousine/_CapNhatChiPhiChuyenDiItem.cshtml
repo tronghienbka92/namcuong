@@ -1,0 +1,12 @@
+﻿@model ThuChiModel
+<table class="adminContent">
+    <tr>
+        <td class="adminTitle">
+            @Model.TenLoaiThuChi :
+        </td>
+        <td class="adminData">
+            <input type="text" name="txtSoTien_@Model.ChuyenDiThuChiId" data_typeid="@Model.TenLoaiThuChi" value="@Model.SoTien.ToString("###.###")" />
+          
+        </td>
+    </tr>
+</table>

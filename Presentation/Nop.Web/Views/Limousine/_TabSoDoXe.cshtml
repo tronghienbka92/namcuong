@@ -1,0 +1,24 @@
+﻿@model QuanLyChuyenModel
+@using Nop.Services.NhaXes
+@using Nop.Core.Domain.NhaXes;
+@{
+    int _top = 100;
+    if(Model.sodoghe.PhanLoai==ENPhanLoaiPhoiVe.CHUYEN_VE)
+    {
+        _top = 20;
+    }
+}
+<div style="position:relative">
+    <div class="tabthongtinsodoghe" style="top:@(_top)px">
+        @Html.Partial("_GetInfoSoDoGheXeToDatVe", Model)
+    </div>
+</div>
+
+<style>
+    .tabthongtinsodoghe {
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        left: 0px;
+    }
+</style>

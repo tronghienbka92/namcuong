@@ -1,0 +1,85 @@
+﻿@model BangDieuChuyenModel
+@using Nop.Web.Models.NhaXes
+@using Nop.Core.Domain.Chonves
+@using Nop.Core.Domain.NhaXes;
+@{
+    var colnum = 10;
+}
+<div style="width:2000px;text-align:left">
+    @foreach (var htcd in Model.hanhtrinhdieuchuyens)
+    {
+        var rownum = htcd.bangdieuchuyens.Count / colnum + 1;
+        <h2>@htcd.TenHanhTrinh</h2>
+        for (int i = 0; i < rownum; i++)
+        {
+            <table style="width:auto;" cellpadding="10">
+                <tr>
+                    @for (int j = i * colnum; j < htcd.bangdieuchuyens.Count && j < (i + 1) * colnum; j++)
+                    {
+                        <td style="vertical-align:top;width:130px;">
+                            @BangDieuChuyenCell(htcd.bangdieuchuyens[j])
+                        </td>
+                    }
+                    <td></td>
+                </tr>
+            </table>
+        }
+        <div style="width:100%;margin-top:5px;margin-bottom:5px;"><hr /></div>
+    }
+</div>
+<div style="width:100%;margin-top:20px;font-size:13px;">
+    <p><strong>Những xe chưa điều: </strong><span style="color:red">@Model.ThongTinXeChuaDieu</span> </p>
+    <p><strong>Những xe đã điều: </strong><span>@Model.ThongTinXeDaDieu</span></p>
+</div>
+<div style="height:120px">&nbsp;</div>
+<div id="windowthietdatchuyendi" style="display:none">
+</div>
+@helper BangDieuChuyenCell(BangDieuChuyenModel.BangDieuChuyenItem item)
+{
+    <div class="tabbangdieuchuyenitemcss">
+        <div style="position:relative;width:100%;height:20px;">
+            <div style="position:absolute;left:-2px;top:-2px;width:20px;height:20px;text-align:left"></div>
+            <div style="position:absolute;right:-2px;top:-2px;width:30px;height:20px;text-align:left;font-weight:bold">@item.TenLichTrinh</div>
+        </div>
+        @foreach (var cd in item.chuyendis)
+        {
+            if (cd.SoKhach > 0)
+            {
+                <div id="spChuyenDi_@cd.Id" style="width:100%;display:block;margin-bottom:7px;"><a href="javascript:void(0);" class="lnkchuyendicss">@cd.BienSoXe3So / @cd.TenLaiXeRutGon / <span style='color:red;font-weight:bold;font-size:14px'>@cd.SoKhach</span></a></div>
+            }
+            else
+            {
+                <div id="spChuyenDi_@cd.Id" style="width:100%;display:block;margin-bottom:7px;"><a href="javascript:void(0);" class="lnkchuyendicss">@(string.Format("{0} / {1} / {2}", cd.BienSoXe3So, cd.TenLaiXeRutGon, cd.SoKhach))</a>&nbsp;</div>
+            }
+        }
+    </div>
+}
+
+<script>
+   
+    $(document).ready(function () {
+
+    });
+
+
+</script>
+<style>
+    .lnkchuyendicss {
+        font-weight: bold;
+        color: #3b94d4;
+    }
+
+    .bghanhtrinh {
+        background-color: #f8f4d7;
+    }
+
+    .tabbangdieuchuyenitemcss {
+        text-align: center;
+        padding: 5px;
+        width: 100%;
+        height: 100%;
+        display: inline-block;
+        border: 1px solid #c1bebe;
+        cursor: pointer;
+    }
+</style>

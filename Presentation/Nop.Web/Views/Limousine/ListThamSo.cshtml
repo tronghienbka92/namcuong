@@ -1,0 +1,81 @@
+﻿@model ThamSo
+@using  Nop.Core.Domain.NhaXes
+@using Nop.Core.Infrastructure
+@Html.ValidationSummary(false)
+@{
+    Layout = "~/Views/Shared/_NhaXeLayout.cshtml";
+    var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+
+    //page title
+    ViewBag.Title = "Quản lý thông tin tham số";
+}
+
+<div class="section-header">
+    <div class="title">
+        <img src="@Url.Content("~/Content/chonve/nxmenu/phoive.png")" alt="" />
+        @ViewBag.Title
+    </div>
+</div>
+
+<div id="example">
+    <div id="grid"></div>
+
+    <script>
+        $(document).ready(function () {
+
+            dataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: "/Limousine/_ListThamSo",
+                        dataType: "jsonp"
+                    },
+                    update: {
+                        url: "/Limousine/EditThamSo",
+                        dataType: "jsonp"
+                    },
+
+                    create: {
+                        url: "/Limousine/CreateThamSo",
+                        dataType: "jsonp"
+                    },
+                    parameterMap: function (options, operation) {
+                        if (operation !== "read" && options.models) {
+                            return { models: kendo.stringify(options.models) };
+                        }
+                    }
+                },
+                batch: true,
+                pageSize: 20,
+                schema: {
+                    model: {
+                        id: "Id",
+                        fields: {
+                            Id: { type: "number", editable: false, nullable: false },
+                            TenThamSo: { type: "string", validation: { required: true }, editable: true },
+                            LoaiThamSoId: { type: "number",  validation: { required: true }, editable: true },
+                            GiaTri: { type: "number", decimals: 3, validation: { required: true }, editable: true },
+                         
+                        }
+                    }
+                }
+            });
+
+            $("#grid").kendoGrid({
+                dataSource: dataSource,
+                pageable: true,
+                height: 300,
+                toolbar: [{ name: "create", text: "Thêm mới" }],
+                columns: [
+
+                    { field: "TenThamSo", title: "Tên tham số" },
+                    { field: "LoaiThamSoId", title: "Loại tham số" },
+
+                    { field: "GiaTri", title: "Giá trị" },                  
+
+                    { command: [{ name: "edit", text: "Sửa" }], title: "&nbsp;" }],
+                editable: "inline"
+            });
+        });
+    </script>
+</div>
